@@ -13,10 +13,13 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
+      "@config": ["src/config.ts"],
       "@constants/*": ["src/constants/*"],
       "@utils/*": ["src/utils/*"],
+      "@lib/*": ["src/lib/*"],
       "@i18n/*": ["src/i18n/*"],
       "@layouts/*": ["src/layouts/*"],
+      "src/*": ["src/*"],
       "@/*": ["src/*"]
     }
   },
