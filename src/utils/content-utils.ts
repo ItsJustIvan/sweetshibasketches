@@ -12,6 +12,7 @@ export interface Post {
         heroImage?: string;
         tags: string[];
         categories: string[];
+        carousel: boolean;
         carouselImages?: Array<{ url: string; description?: string }>;
     };
 }
@@ -28,6 +29,7 @@ const mapContentfulPost = (entry: any): Post => {
           heroImage: entry.fields.heroImage?.fields?.file?.url,
           tags: entry.fields.tags || [],
           categories: entry.fields.categories || [],
+          carousel: entry.fields.carousel || false,
           carouselImages: entry.fields.carouselImages
             ? entry.fields.carouselImages.map((image: any) => ({
                 url: image.fields.file.url,
