@@ -65,7 +65,14 @@ export const profileConfig: ProfileConfig = {
 			url: "https://www.instagram.com/sweetshibasketches",
 		},
 		{
-			name: "GitHub",
+			name: "Facebook",
+			icon: "fa6-brands:facebook", // Visit https://icones.js.org/ for icon codes
+			// You will need to install the corresponding icon set if it's not already included
+			// `pnpm add @iconify-json/<icon-set-name>`
+			url: "https://www.facebook.com/SweetShibaSketches/",
+		},
+		{
+			name: "Printify Store",
 			icon: "fa6-solid:cart-shopping",
 			url: "https://sweetshibasketches.printify.me/?fbclid=PAZXh0bgNhZW0CMTEAAadUrWif1LP-HM8_nPUSUbVG2p1_zZrxe7gdEA1NbhEZ4LEde3kkODaH1Ih2-g_aem__LlMcsx2XVbnXaRDLVQUhw",
 		},

@@ -4,7 +4,7 @@ import type { Document } from "@contentful/rich-text-types";
 export interface Post {
     id: string;
     slug: string;
-    body: string;
+    body: Document;
     data: {
         title: string;
         description: string;
@@ -13,6 +13,10 @@ export interface Post {
         tags: string[];
         categories: string[];
         carousel: boolean;
+        nextSlug?: string;
+        nextTitle?: string;
+        prevSlug?: string;
+        prevTitle?: string;
         carouselImages?: Array<{ url: string; description?: string }>;
     };
 }
@@ -47,7 +51,19 @@ export const getSortedPosts = async () => {
     });
 
     const allPosts = entries.items.map(mapContentfulPost);
-	return allPosts;
+
+    // Add next/prev logic
+    for (let i = 0; i < allPosts.length; i++) {
+        if (i > 0) {
+            allPosts[i].data.prevSlug = allPosts[i - 1].slug;
+            allPosts[i].data.prevTitle = allPosts[i - 1].data.title;
+        }
+        if (i < allPosts.length - 1) {
+            allPosts[i].data.nextSlug = allPosts[i + 1].slug;
+            allPosts[i].data.nextTitle = allPosts[i + 1].data.title;
+        }
+    }
+    return allPosts;
 };
 
 export interface Category {
