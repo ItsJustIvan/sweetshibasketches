@@ -1,0 +1,20 @@
+---
+const { images } = Astro.props;
+---
+
+<div class="carousel">
+  {images.map((image) => (
+    <img src={image.url} alt={image.description} class="carousel-image" />
+  ))}
+</div>
+
+<style>
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+.carousel-image {
+  max-width: 100%;
+}
+</style>

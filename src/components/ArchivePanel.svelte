@@ -19,8 +19,8 @@ interface Post {
 	data: {
 		title: string;
 		tags: string[];
-		category?: string;
-		published: Date;
+		categories?: string[];
+		pubDate: string; // Dates are serialized to strings when passed to client components
 	};
 }
 
@@ -54,7 +54,9 @@ onMount(async () => {
 
 	if (categories.length > 0) {
 		filteredPosts = filteredPosts.filter(
-			(post) => post.data.category && categories.includes(post.data.category),
+			(post) =>
+				Array.isArray(post.data.categories) &&
+				post.data.categories.some((cat) => categories.includes(cat)),
 		);
 	}
 
@@ -64,7 +66,7 @@ onMount(async () => {
 
 	const grouped = filteredPosts.reduce(
 		(acc, post) => {
-			const year = post.data.published.getFullYear();
+			const year = new Date(post.data.pubDate).getFullYear();
 			if (!acc[year]) {
 				acc[year] = [];
 			}
@@ -112,7 +114,7 @@ onMount(async () => {
                     <div class="flex flex-row justify-start items-center h-full">
                         <!-- date -->
                         <div class="w-[15%] md:w-[10%] transition text-sm text-right text-50">
-                            {formatDate(post.data.published)}
+                           {formatDate(new Date(post.data.pubDate))}
                         </div>
 
                         <!-- dot and line -->

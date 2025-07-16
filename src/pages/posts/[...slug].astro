@@ -1,21 +1,19 @@
 ---
 import path from "node:path";
 import License from "@components/misc/License.astro";
-import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import Carousel from "@components/Carousel.astro";
 import type { GetStaticPaths } from "astro";
 import { getSortedPosts, Post } from "@utils/content-utils";
-import { getDir, getPostUrlBySlug } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
-import ImageWrapper from "@components/misc/ImageWrapper.astro";
-import PostMetadata from "@components/PostMeta.astro";
 import { profileConfig, siteConfig } from "@config";
 import { formatDateToYYYYMMDD } from "@utils/date-utils";
-import { contentfulClient } from "@lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import PostMetadata from "@components/PostMeta.astro";
+
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -44,8 +42,30 @@ const jsonLd = {
 		: siteConfig.lang.replace("_", "-"),
 };
 
-const renderBody = () => documentToHtmlString(entry.body);
+const renderBody = () => {
+    // Custom rendering options to handle embedded entries
+    const options = {
+        renderNode: {
+            "embedded-entry-inline": (node) => {
+                    const carouselEntryId = node.data.target.sys.id;
 
+                    if (node.data.target.sys.contentType.sys.id === "carousel") {
+                        return `<Carousel entryId="${carouselEntryId}" />`;
+                    } else {
+                        return ""; // Return empty string for other embedded entries
+                    }
+                },
+        },
+    };
+    return documentToHtmlString(entry.body, options);
+};
+
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const pubDateFormatted = formatDate(entry.data.pubDate);
 ---
 <MainGridLayout banner={entry.data.image} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={[]}>
     <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
@@ -83,23 +103,27 @@ const renderBody = () => documentToHtmlString(entry.body);
                 </div>
             </div>
 
-            {/* metadata */}
+            {/* metadata  - Display publish date and tags */}
             <div class="onload-animation">
                 <PostMetadata
-                    class="mb-5"
-                    published={entry.data.published}
+                    class="mb-5 flex items-center"    
+                    published={entry.data.pubDate}
                     tags={entry.data.tags}
+                    categories={entry.data.categories}
                 ></PostMetadata>
                 {!entry.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
             </div>
 
-            {/* cover image */}
-            {entry.data.image &&
-                <ImageWrapper id="post-cover" src={entry.data.image} basePath={"/"} alt={entry.data.title} class="mb-8 rounded-xl banner-container onload-animation"/>
-            }
+            {/* Render Carousel conditionally */}
+            {entry.data.carousel && entry.data.carouselImages && entry.data.carouselImages.length > 0 && (
+                <Carousel images={entry.data.carouselImages} />
+            )}
 
-            {/* post content */}
+
+            {/* post content - Render the Rich Text body */}
             <div class="mb-6 markdown-content onload-animation" set:html={renderBody()} data-pagefind-body></div>
+
+            
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"/>}
         </div>

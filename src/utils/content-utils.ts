@@ -1,5 +1,4 @@
 import { contentfulClient } from "../lib/contentful";
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import type { Document } from "@contentful/rich-text-types";
 
 export interface Post {
@@ -12,6 +11,8 @@ export interface Post {
         pubDate: Date;
         heroImage?: string;
         tags: string[];
+        categories: string[];
+        carouselImages?: Array<{ url: string; description?: string }>;
     };
 }
 
@@ -19,15 +20,22 @@ const mapContentfulPost = (entry: any): Post => {
     return {
         id: entry.sys.id,
         slug: entry.fields.slug,
-        body: documentToHtmlString(entry.fields.body as Document),
-        data: {
-            title: entry.fields.title,
-            description: entry.fields.description,
-            pubDate: new Date(entry.fields.publishDate),
-            heroImage: entry.fields.heroImage?.fields.file.url,
-            tags: entry.fields.tags || [],
+        body: entry.fields.body as Document,
+         data: {
+          title: entry.fields.title,
+          description: entry.fields.description,
+          pubDate: new Date(entry.fields.publishDate),
+          heroImage: entry.fields.heroImage?.fields?.file?.url,
+          tags: entry.fields.tags || [],
+          categories: entry.fields.categories || [],
+          carouselImages: entry.fields.carouselImages
+            ? entry.fields.carouselImages.map((image: any) => ({
+                url: image.fields.file.url,
+                description: image.fields.description || "", // Provide a default
+              }))
+            : [],
         }
-    }
+      }
 }
 
 export const getSortedPosts = async () => {
@@ -41,6 +49,7 @@ export const getSortedPosts = async () => {
 };
 
 export interface Category {
+    // Updated to reflect tags, keeping the name for compatibility
     name: string;
     count: number;
     url: string;
@@ -48,18 +57,18 @@ export interface Category {
 
 export const getCategoryList = async (): Promise<Category[]> => {
     const allPosts = await getSortedPosts();
-    const tagCounts: Map<string, number> = new Map();
+    const categoryCounts: Map<string, number> = new Map(); // Updated variable name
 
     allPosts.forEach(post => {
-        post.data.tags?.forEach(tag => {
-            tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+        post.data.categories?.forEach(tag => { // Access categories
+            categoryCounts.set(tag, (categoryCounts.get(tag) || 0) + 1);
         });
     });
 
-    const categories = Array.from(tagCounts.entries()).map(([name, count]) => ({
+    const categories = Array.from(categoryCounts.entries()).map(([name, count]) => ({
         name,
         count,
-        url: `/tags/${encodeURIComponent(name.toLowerCase())}/`
+        url: `/archive/?category=${encodeURIComponent(name)}`
     }));
 
     // Sort by count descending, then by name ascending
@@ -87,7 +96,7 @@ export const getTagList = async (): Promise<Tag[]> => {
     const tags = Array.from(tagCounts.entries()).map(([name, count]) => ({
         name,
         count,
-        url: `/tags/${encodeURIComponent(name.toLowerCase())}/`
+        url: `/archive/?tag=${encodeURIComponent(name)}`
     }));
 
     // Sort tags alphabetically by name

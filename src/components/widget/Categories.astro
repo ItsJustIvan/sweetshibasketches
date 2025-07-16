@@ -18,14 +18,14 @@ const className = Astro.props.class;
 const style = Astro.props.style;
 ---
 
-<WidgetLayout name="Tags" id="tags" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT}
+<WidgetLayout name="Categories" id="categories" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT}
                 class={className} style={style}
 >
     {tags.map((tag) =>
         (<ButtonLink
             url={tag.url}
             badge={String(tag.count)}
-            label={`View all posts with the tag ${tag.name.trim()}`}
+            label={`View all posts with the category ${tag.name.trim()}`}
         >
             {tag.name.trim()}
         </ButtonLink>)

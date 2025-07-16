@@ -1,0 +1,28 @@
+---
+import { contentfulClient } from "@lib/contentful";
+
+const { entryId } = Astro.props;
+
+const carouselEntry = await contentfulClient.getEntry(entryId);
+
+const images = carouselEntry.fields?.images || [];
+---
+
+<div class="carousel">
+  {images.map((image) => (
+    <img src={image.fields.file.url} alt={image.fields.description} />
+  ))}
+</div>
+
+<style>
+    .carousel {
+        display: flex;
+        overflow-x: auto;
+        /* Add more styling as needed */
+    }
+
+    .carousel img {
+        width: 100%; /* Or set a specific width */
+        height: auto;
+    }
+</style>
