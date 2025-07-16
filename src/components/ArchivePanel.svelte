@@ -61,7 +61,9 @@ onMount(async () => {
 	}
 
 	if (uncategorized) {
-		filteredPosts = filteredPosts.filter((post) => !post.data.category);
+		filteredPosts = filteredPosts.filter(
+			(post) => !post.data.categories || post.data.categories.length === 0
+		);
 	}
 
 	const grouped = filteredPosts.reduce(

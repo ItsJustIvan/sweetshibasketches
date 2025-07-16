@@ -26,6 +26,9 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 
+// Log the props to the terminal to inspect the data for this specific post
+console.log(`Data for slug: ${entry.slug}`, JSON.stringify(entry.data, null, 2));
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",

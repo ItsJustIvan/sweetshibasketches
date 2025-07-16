@@ -1,20 +1,45 @@
 ---
+// Import Splide's core and theme CSS.
+// The path needs to point to the 'dist' folder inside the package.
+import '@splidejs/splide/dist/css/splide.min.css';
+import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
+
 const { images } = Astro.props;
+// Generate a unique ID for each carousel instance to target with the script.
+const uniqueId = `carousel-${crypto.randomUUID()}`;
 ---
 
-<div class="carousel">
-  {images.map((image) => (
-    <img src={image.url} alt={image.description} class="carousel-image" />
-  ))}
+<!-- Splide requires a specific HTML structure -->
+<div class="splide" id={uniqueId} aria-label="Image Carousel">
+  <div class="splide__track">
+		<ul class="splide__list">
+      {images.map((image) => (
+        <li class="splide__slide">
+          <img src={image.url} alt={image.description || 'Carousel image'} />
+        </li>
+      ))}
+		</ul>
+  </div>
 </div>
 
 <style>
-.carousel {
-  display: flex;
-  overflow-x: auto;
-  padding: 1rem 0;
-}
-.carousel-image {
-  max-width: 100%;
-}
+  /* Optional: Add some custom styles */
+  .splide__slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-large);
+  }
 </style>
+
+<script define:vars={{ uniqueId }}>
+  import Splide from '@splidejs/splide';
+
+  // Initialize Splide on the unique ID
+  new Splide(`#${uniqueId}`, {
+    type: 'loop', // Loop back to the start
+    drag: 'free',
+    perPage: 1,      // Show one image at a time
+    autoplay: false,  // Automatically cycle through images
+  }).mount();
+</script>

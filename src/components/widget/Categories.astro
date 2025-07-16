@@ -3,12 +3,12 @@ import { getCategoryList } from "../../utils/content-utils.ts";
 import ButtonLink from "../control/ButtonLink.astro";
 import WidgetLayout from "./WidgetLayout.astro";
 
-const tags = await getCategoryList();
+const categories = await getCategoryList();
 
 const COLLAPSED_HEIGHT = "7.5rem";
 const COLLAPSE_THRESHOLD = 5;
 
-const isCollapsed = tags.length >= COLLAPSE_THRESHOLD;
+const isCollapsed = categories.length >= COLLAPSE_THRESHOLD;
 
 interface Props {
 	class?: string;
@@ -21,13 +21,13 @@ const style = Astro.props.style;
 <WidgetLayout name="Categories" id="categories" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT}
                 class={className} style={style}
 >
-    {tags.map((tag) =>
+    {categories.map((category) =>
         (<ButtonLink
-            url={tag.url}
-            badge={String(tag.count)}
-            label={`View all posts with the category ${tag.name.trim()}`}
+            url={category.url}
+            badge={String(category.count)}
+            label={`View all posts with the category ${category.name.trim()}`}
         >
-            {tag.name.trim()}
+            {category.name.trim()}
         </ButtonLink>)
     )}
 </WidgetLayout>
