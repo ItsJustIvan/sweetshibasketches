@@ -74,6 +74,9 @@ importers:
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5
+      astro-splide:
+        specifier: ^2.0.0
+        version: 2.0.0
       contentful:
         specifier: ^11.7.7
         version: 11.7.7
@@ -2004,6 +2007,9 @@ packages:
 
   astro-icon@1.1.5:
     resolution: {integrity: sha512-CJYS5nWOw9jz4RpGWmzNQY7D0y2ZZacH7atL2K9DeJXJVaz7/5WrxeyIxO8KASk1jCM96Q4LjRx/F3R+InjJrw==}
+
+  astro-splide@2.0.0:
+    resolution: {integrity: sha512-7UDYgi8BdkujKrxFPKII+zwvhcw/gVz9Fbs+ueTO3T2ur4zBEDvO9bWmXWH+pNkal4jvqTGWwuK6w9ZIUHr8wQ==}
 
   astro@5.10.2:
     resolution: {integrity: sha512-CCBU+e/Apk6NWEMnc/R9dVZD/+FaCnNqWJicX1Oe6T18vLKop+LPs/m/88ekJk4zxP1g1N/GfUq4wEedUSk1Wg==}
@@ -7339,6 +7345,10 @@ snapshots:
     transitivePeerDependencies:
       - debug
       - supports-color
+
+  astro-splide@2.0.0:
+    dependencies:
+      '@splidejs/splide': 4.1.4
 
   astro@5.10.2(@types/node@24.0.10)(jiti@1.21.7)(lightningcss@1.29.3)(rollup@2.79.2)(sass@1.80.4)(stylus@0.64.0)(terser@5.39.0)(typescript@5.8.3)(yaml@2.7.0):
     dependencies:

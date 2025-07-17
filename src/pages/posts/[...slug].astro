@@ -27,7 +27,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 
 // Log the props to the terminal to inspect the data for this specific post
-console.log(`Data for slug: ${entry.slug}`, JSON.stringify(entry.data, null, 2));
+console.log(`Data for body: ${entry.body}`, JSON.stringify(entry.body.content, null, 2));
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -59,7 +59,19 @@ const renderBody = () => {
                         return ""; // Return empty string for other embedded entries
                     }
                 },
-        },
+            'embedded-entry-block': (node) => {
+                // Check if the embedded entry is the 'Embed Content' type
+                if (node?.data?.target?.sys?.contentType?.sys?.id === 'embedContent') {
+                    const embCode = node.data.target.fields?.embCode;
+
+                    if (typeof embCode === 'string') {
+                         // The embed code from Contentful is HTML-escaped (&lt; -> <). We need to decode it.
+                        return embCode.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                    }
+                }
+                // Return an empty string for any other unhandled embedded block types
+                return '';
+        }}
     };
     return documentToHtmlString(entry.body, options);
 };

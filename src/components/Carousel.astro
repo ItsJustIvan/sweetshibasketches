@@ -1,8 +1,34 @@
 ---
+import "@splidejs/splide/css"
+import { Splide, SplideSlide } from 'astro-splide';
+
+const { images } = Astro.props;
+// Generate a unique ID for each carousel instance to target with the script.
+const uniqueId = `carousel-${crypto.randomUUID()}`;
+---
+
+<Splide
+  class={{ uniqueId }} 'not-content'
+  options={ {  // check for options at https://splidejs.com/guides/options/
+    type: 'loop',         // type of the carousel
+    autoplay: false,       // activate autoplay
+    perPage: 1,
+    pauseOnHover: false,  // do not pause autoplay on mouseover
+  } }
+>
+
+{images.map((image) => (
+      <SplideSlide>
+        <img src={image.url} alt={image.description || 'Carousel image'} />
+      </SplideSlide>
+    ))}
+
+{/* 
+---
 // Import Splide's core and theme CSS.
 // The path needs to point to the 'dist' folder inside the package.
 import '@splidejs/splide/dist/css/splide.min.css';
-import '@splidejs/splide/dist/css/themes/splide-sea-green.min.css';
+import Splide from '@splidejs/splide';
 
 const { images } = Astro.props;
 // Generate a unique ID for each carousel instance to target with the script.
@@ -22,24 +48,16 @@ const uniqueId = `carousel-${crypto.randomUUID()}`;
   </div>
 </div>
 
-<style>
-  /* Optional: Add some custom styles */
-  .splide__slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: var(--radius-large);
-  }
-</style>
-
 <script define:vars={{ uniqueId }}>
-  import Splide from '@splidejs/splide';
 
   // Initialize Splide on the unique ID
   new Splide(`#${uniqueId}`, {
     type: 'loop', // Loop back to the start
+    height : '9rem',
     drag: 'free',
     perPage: 1,      // Show one image at a time
     autoplay: false,  // Automatically cycle through images
   }).mount();
 </script>
+
+*/}
