@@ -58,6 +58,13 @@ export const profileConfig: ProfileConfig = {
 	bio: "Silly comics, weaponized cuteness, and just the right amount of cringe.",
 	links: [
 		{
+			name: "Youtube",
+			icon: "fa6-brands:youtube", // Visit https://icones.js.org/ for icon codes
+			// You will need to install the corresponding icon set if it's not already included
+			// `pnpm add @iconify-json/<icon-set-name>`
+			url: "https://www.youtube.com/@sweetshibasketches",
+		},
+		{
 			name: "Instagram",
 			icon: "fa6-brands:instagram", // Visit https://icones.js.org/ for icon codes
 			// You will need to install the corresponding icon set if it's not already included
