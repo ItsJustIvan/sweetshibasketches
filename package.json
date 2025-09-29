@@ -35,7 +35,7 @@
     "@splidejs/splide": "^4.1.4",
     "@swup/astro": "^1.6.0",
     "@tailwindcss/typography": "^0.5.16",
-    "astro": "5.10.2",
+    "astro": "5.14.1",
     "astro-expressive-code": "^0.41.2",
     "astro-icon": "^1.1.5",
     "astro-splide": "^2.0.0",
